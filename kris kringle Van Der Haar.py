@@ -45,8 +45,8 @@ def generate_kris_kringle_scheme(participants_groups):
 groups = [
     ["Robbo", "Monique", "Jack", "Kate"],
     ["Nicole", "John", "Alex", "Marcus", "Isabel"],
-    ["Michelle", "Phil", "Xavier", "Caleb", "Lauren"],
-    ["Damien", "Joanne", "Nicholas", "Emma", "Claire", "Rachael"],
+    ["Michelle", "Phil", "Xavier", "Caleb"],
+    ["Damien", "Joanne", "Emma", "Claire", "Rachael"],
     ["Mark", "Dylan"]
 ]
 
