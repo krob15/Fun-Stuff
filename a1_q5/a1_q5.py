@@ -11,19 +11,21 @@ def graph_search(G, h_function, start_node, goal_node, strategy):
     n = len(G) #number of nodes
     explored = set()
     discovered = []
-
+    node_counter = 0
     
     if strategy == 'B':
         discovered = deque([(start_node, [start_node], 0, 0)])
     elif strategy == 'D':
         discovered = deque([(start_node, [start_node], 0, 0)])
     else:
-        counter = 0
+        discovered = []
         if strategy == 'G':
             priority = h_function(start_node)
         else: # strategy = A*
             priority = 0 + h_function(start_node)
-    
+            heapq.heappush(discovered, (priority, node_counter, (start_node, [start_node], 0, 0)))
+            node_counter += 1
+
     while discovered:
         if strategy == 'B':  # BFS - FIFO
             current_node, path, g_cost, depth = discovered.popleft()
@@ -41,7 +43,32 @@ def graph_search(G, h_function, start_node, goal_node, strategy):
             continue
         explored.add(current_node)
     
-   
+        neighbors = []
+        for neighbor_node in range(n):
+            if G[current_node][neighbor_node] is not None:
+                edge_cost = G[current_node][neighbor_node]
+                new_g_cost = g_cost + edge_cost
+                new_depth = depth + 1
+                new_path = path + [neighbor_node]
+                
+                if neighbor_node not in explored:
+                    neighbors.append((neighbor_node, new_path, new_g_cost, new_depth))
+        
+        # Add neighbors to frontier based on strategy
+        for neighbor_node, new_path, new_g_cost, new_depth in neighbors:
+            if strategy == 'B':  # BFS
+                discovered.append((neighbor_node, new_path, new_g_cost, new_depth))
+            elif strategy == 'D':  # DFS
+                discovered.append((neighbor_node, new_path, new_g_cost, new_depth))
+            elif strategy == 'G':  # Greedy
+                priority = h_function(neighbor_node)
+                node_counter += 1
+                heapq.heappush(discovered, (priority, node_counter, (neighbor_node, new_path, new_g_cost, new_depth)))
+            else:  # A*
+                priority = new_g_cost + h_function(neighbor_node)  # g + h
+                node_counter += 1
+                heapq.heappush(discovered, (priority, node_counter, (neighbor_node, new_path, new_g_cost, new_depth)))
+    
     return None
 
 
