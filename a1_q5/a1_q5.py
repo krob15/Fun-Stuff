@@ -21,6 +21,8 @@ def graph_search(G, h_function, start_node, goal_node, strategy):
         discovered = []
         if strategy == 'G':
             priority = h_function(start_node)
+            heapq.heappush(discovered, (priority, node_counter, (start_node, [start_node], 0, 0)))
+            node_counter += 1
         else: # strategy = A*
             priority = 0 + h_function(start_node)
             heapq.heappush(discovered, (priority, node_counter, (start_node, [start_node], 0, 0)))
@@ -104,7 +106,7 @@ if __name__ == "__main__":
     heuristic_func = lambda n: heuristic[n][goal_state]        
             
     # find and print the path. The vertices are numbered as they appear in the original graph. Add whatever inputs you need to your graph search function
-    path = graph_search()
+    path = graph_search(graph, heuristic_func, start_state, goal_state, search_strategy)
     if path is not None:
         path = str([state + 1 for state in path])
     print(path)
